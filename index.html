@@ -74,21 +74,55 @@
           name: "Encontrar transportadora / vínculo",
           from: "New Seller",
           href: PANELS.newSeller.replace(/\/$/, "") + "/?solo=vinculo",
+          bullets: [
+            "Busca de transportadoras no mapa por nome e CEP de coleta",
+            "Raio de cobertura e rota até o ponto de coleta",
+            "Solicitação de vínculo com dados cadastrais do seller",
+            "Acompanhamento do status da análise (aguardando, em contato, aprovada, recusada, concluída)",
+            "Histórico da solicitação e contato por WhatsApp",
+          ],
         },
         {
           name: "Controle de reputação (vendedor)",
           from: "Seller",
           href: PANELS.seller.replace(/\/$/, "") + "/?solo=reputacao",
+          bullets: [
+            "Lista de remessas com reputação afetada (atraso)",
+            "Colunas: remessa, ID de venda ML, loja, data prevista, data de coleta, atraso e status FNVJ",
+            "Filtro por período da coleta e métricas do painel",
+            "Introdução na primeira visita e “Como funciona”",
+            "Carteira de pacotes (Flexível R$ 9 e Escala R$ 7, mínimo 50)",
+            "Débito de 1 remoção por acionamento da Fique no Verde Já",
+            "Comprovante discreto da liquidação Asaas (90% FNVJ / 10% TRACKen)",
+          ],
         },
         {
           name: "Controle de reputação (operacional)",
           from: "Operacional",
           href: PANELS.operacional.replace(/\/$/, "") + "/?solo=reputacao",
+          bullets: [
+            "Mesmo fluxo do vendedor, com a coluna Cliente no lugar de Loja",
+            "Lista de remessas com reputação afetada e status FNVJ",
+            "Filtro por período da coleta e métricas",
+            "Carteira de pacotes Flexível e Escala",
+            "Débito de 1 remoção por acionamento",
+            "Comprovante discreto da liquidação Asaas",
+          ],
         },
         {
           name: "Solicitações de vínculo",
           from: "Operacional",
           href: PANELS.operacional.replace(/\/$/, "") + "/?solo=vinculo",
+          bullets: [
+            "Fila de pedidos enviados pelo New Seller",
+            "Análise: entrar em contato, aprovar ou recusar",
+            "Cadastro do cliente (documento, razão social, nome fantasia, telefone, CEP, número, ambiente, CST)",
+            "Vínculo de serviços (ML, Shopee, Amazon, Magalu) com tabelas de preço de exemplo",
+            "Campos opcionais: e-mail, complemento e observações",
+            "Criação de login (e-mail, usuário, documento, WhatsApp, senha) com perfil Cliente bloqueado",
+            "Compartilhar acesso com o seller (e-mail, WhatsApp ou copiar)",
+            "Devolução do status da análise para o New Seller",
+          ],
         },
       ];
 
@@ -101,11 +135,15 @@
       }
 
       function cardProto(item) {
+        const bullets = (item.bullets || [])
+          .map((line) => `<li>${line}</li>`)
+          .join("");
         return `
           <a href="${item.href}" target="_blank" rel="noopener"
             class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-tracken-green hover:shadow-md transition-all">
             <p class="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-1">${item.from}</p>
             <h2 class="font-semibold text-gray-900">${item.name}</h2>
+            <ul class="mt-3 list-disc pl-4 space-y-1 text-xs text-gray-500 leading-relaxed">${bullets}</ul>
           </a>`;
       }
 
