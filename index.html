@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TRACKen Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Inter", "sans-serif"] },
+            colors: { tracken: { green: "#74C843", dark: "#2A2A2A" } },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="min-h-screen bg-[#F3F4F6] text-gray-800 font-sans">
+    <header class="bg-white border-b border-gray-200">
+      <div class="max-w-5xl mx-auto px-4 py-5 flex items-center justify-between">
+        <div>
+          <div class="text-2xl font-bold text-tracken-dark tracking-tight">
+            TRACK<span class="text-tracken-green">en</span>
+            <span class="text-base font-medium text-gray-500 ml-1">Lab</span>
+          </div>
+          <p class="text-xs text-gray-500 mt-0.5">
+            Painéis completos e features isoladas para demo
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8">
+      <div class="flex gap-2 mb-6">
+        <button
+          type="button"
+          id="tab-paineis"
+          onclick="showTab('paineis')"
+          class="px-4 py-2 rounded-lg text-sm font-semibold bg-white border border-gray-200 shadow-sm"
+        >
+          Painéis
+        </button>
+        <button
+          type="button"
+          id="tab-features"
+          onclick="showTab('features')"
+          class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-white"
+        >
+          Features
+        </button>
+      </div>
+
+      <section id="list-paineis" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></section>
+      <section id="list-features" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden"></section>
+    </main>
+
+    <script>
+      // Cole aqui as URLs de produção (Vercel) dos três painéis.
+      const PANELS = {
+        newSeller: "https://painel-new-seller.vercel.app",
+        seller: "https://painel-seller.vercel.app",
+        operacional: "https://painel-operacional.vercel.app",
+      };
+
+      const PAINEIS = [
+        {
+          name: "TRACKen New Seller",
+          blurb: "Produto completo. Encontre transportadora e solicite vínculo.",
+          href: PANELS.newSeller,
+          icon: "fa-map-location-dot",
+        },
+        {
+          name: "TRACKen Seller",
+          blurb: "Produto completo. Reputação, carteira e demais telas do vendedor.",
+          href: PANELS.seller,
+          icon: "fa-store",
+        },
+        {
+          name: "TRACKen Operacional",
+          blurb: "Produto completo. Reputação, vínculo, cadastro e operação.",
+          href: PANELS.operacional,
+          icon: "fa-truck",
+        },
+      ];
+
+      const FEATURES = [
+        {
+          name: "Encontrar transportadora / vínculo",
+          blurb: "Busca no mapa e pedido de vínculo, sem o restante do seller.",
+          from: "New Seller",
+          href: PANELS.newSeller.replace(/\/$/, "") + "/?solo=vinculo",
+        },
+        {
+          name: "Controle de reputação (vendedor)",
+          blurb: "Pedidos em atraso, tratativa e carteira no painel do seller.",
+          from: "Seller",
+          href: PANELS.seller.replace(/\/$/, "") + "/?solo=reputacao",
+        },
+        {
+          name: "Controle de reputação (operacional)",
+          blurb: "Mesma tratativa no painel da transportadora.",
+          from: "Operacional",
+          href: PANELS.operacional.replace(/\/$/, "") + "/?solo=reputacao",
+        },
+        {
+          name: "Solicitações de vínculo",
+          blurb: "Fila de análise, cadastro e login no operacional.",
+          from: "Operacional",
+          href: PANELS.operacional.replace(/\/$/, "") + "/?solo=vinculo",
+        },
+      ];
+
+      function cardPanel(item) {
+        return `
+          <a href="${item.href}" target="_blank" rel="noopener"
+            class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-tracken-green hover:shadow-md transition-all">
+            <div class="w-10 h-10 rounded-lg bg-tracken-green/10 text-tracken-green flex items-center justify-center mb-3">
+              <i class="fa-solid ${item.icon}"></i>
+            </div>
+            <h2 class="font-semibold text-gray-900">${item.name}</h2>
+            <p class="text-xs text-gray-500 mt-1 leading-relaxed">${item.blurb}</p>
+            <p class="text-[11px] font-medium text-tracken-green mt-3">Produto completo →</p>
+          </a>`;
+      }
+
+      function cardFeature(item) {
+        return `
+          <a href="${item.href}" target="_blank" rel="noopener"
+            class="block bg-white rounded-xl border border-gray-200 p-5 hover:border-tracken-green hover:shadow-md transition-all">
+            <p class="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-1">${item.from}</p>
+            <h2 class="font-semibold text-gray-900">${item.name}</h2>
+            <p class="text-xs text-gray-500 mt-1 leading-relaxed">${item.blurb}</p>
+            <p class="text-[11px] font-medium text-tracken-green mt-3">Abrir só esta feature →</p>
+          </a>`;
+      }
+
+      document.getElementById("list-paineis").innerHTML = PAINEIS.map(cardPanel).join("");
+      document.getElementById("list-features").innerHTML = FEATURES.map(cardFeature).join("");
+
+      function showTab(tab) {
+        const paineis = tab === "paineis";
+        document.getElementById("list-paineis").classList.toggle("hidden", !paineis);
+        document.getElementById("list-features").classList.toggle("hidden", paineis);
+        const btnP = document.getElementById("tab-paineis");
+        const btnF = document.getElementById("tab-features");
+        btnP.className = paineis
+          ? "px-4 py-2 rounded-lg text-sm font-semibold bg-white border border-gray-200 shadow-sm"
+          : "px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-white";
+        btnF.className = !paineis
+          ? "px-4 py-2 rounded-lg text-sm font-semibold bg-white border border-gray-200 shadow-sm"
+          : "px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-white";
+      }
+    </script>
+  </body>
+</html>
